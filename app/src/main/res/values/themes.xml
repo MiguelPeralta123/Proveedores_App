@@ -1,0 +1,28 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ProveedoresApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- Primary brand colors -->
+        <item name="colorPrimary">@color/color_purple</item>
+        <item name="colorPrimaryVariant">@color/color_purple_accent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand colors -->
+        <item name="colorSecondary">@color/color_gray</item>
+        <item name="colorSecondaryVariant">@color/color_light_gray</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar colors -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+    </style>
+
+    <style name="Theme.ProveedoresApp" parent="Base.Theme.ProveedoresApp" />
+
+    // Custom style for menu button
+    <style name="menuButton" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_marginLeft">25dp</item>
+        <item name="android:layout_marginRight">25dp</item>
+        <item name="android:backgroundTint">@color/color_btn</item>
+    </style>
+</resources>
