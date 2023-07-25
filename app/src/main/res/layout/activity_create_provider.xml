@@ -21,7 +21,7 @@
             android:textSize="22sp"
             android:gravity="center_horizontal"
             android:fontFamily="@font/roboto_serif"
-            android:layout_marginVertical="20dp" />
+            android:layout_marginVertical="25dp" />
         
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -43,7 +43,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Empresa" />
+                        android:text="Empresa"
+                        android:layout_marginTop="15dp" />
 
                     <Spinner
                         android:layout_width="match_parent"
@@ -134,7 +135,7 @@
                         android:text="Guardar"
                         android:layout_marginVertical="20dp"
                         android:drawableRight="@drawable/ic_send"
-                        android:paddingHorizontal="80dp"
+                        android:paddingHorizontal="40dp"
                         style="@style/saveButton" />
 
                 </LinearLayout>

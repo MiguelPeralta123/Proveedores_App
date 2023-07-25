@@ -1,6 +1,6 @@
-package drawable.io
+package com.learning.proveedoresapp.io
 
-import drawable.io.response.LoginResponse
+import com.learning.proveedoresapp.io.response.LoginResponse
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
