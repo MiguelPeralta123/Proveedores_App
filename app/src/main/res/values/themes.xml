@@ -16,10 +16,20 @@
 
     <style name="Theme.ProveedoresApp" parent="Base.Theme.ProveedoresApp" />
 
-    // Custom style for menu button
+    // Custom style for button "Menu"
     <style name="menuButton" parent="@style/Widget.AppCompat.Button.Colored">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">60dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_marginLeft">25dp</item>
+        <item name="android:layout_marginRight">25dp</item>
+        <item name="android:backgroundTint">@color/color_btn</item>
+    </style>
+
+    // Custom style for button "Save"
+    <style name="saveButton" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">45dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:layout_marginLeft">25dp</item>
         <item name="android:layout_marginRight">25dp</item>
