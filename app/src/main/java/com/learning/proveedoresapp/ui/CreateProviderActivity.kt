@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import com.learning.proveedoresapp.R
 
@@ -88,5 +89,28 @@ class CreateProviderActivity : AppCompatActivity() {
         tvCuenta.text = etCuenta.text.toString()
         tvClabe.text = etClabe.text.toString()
         tvMoneda.text = spinnerMoneda.selectedItem.toString()
+    }
+
+    override fun onBackPressed() {
+        // If confirmData is visible, return to createProvider
+        val cvCreateProvider = findViewById<CardView>(R.id.cv_create_provider)
+        val cvConfirmData = findViewById<CardView>(R.id.cv_confirm_data)
+        if (cvConfirmData.visibility == View.VISIBLE) {
+            cvConfirmData.visibility = View.GONE
+            cvCreateProvider.visibility = View.VISIBLE
+            return
+        }
+        // Else, display AlertDialog
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("¿Seguro que desea salir?")
+        builder.setMessage("Los cambios realizados se perderán")
+        builder.setPositiveButton("Salir") {dialog, which ->
+            finish()
+        }
+        builder.setNegativeButton("Cancelar") {dialog, which ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 }
