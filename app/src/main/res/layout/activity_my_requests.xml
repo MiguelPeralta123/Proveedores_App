@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.NewRequestActivity">
+    tools:context=".ui.MyRequestsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nueva solicitud"
+            android:text="Mis solicitudes"
             android:textSize="40sp"
             android:fontFamily="@font/montserrat"
             android:layout_marginTop="100dp"
@@ -41,18 +41,18 @@
         android:gravity="center_horizontal">
 
         <Button
-            android:id="@+id/btn_provider"
-            android:text="Cliente o proveedor"
+            android:id="@+id/btn_providers"
+            android:text="Clientes o proveedores"
             android:layout_marginBottom="20dp"
-            android:drawableLeft="@drawable/ic_person_add"
+            android:drawableLeft="@drawable/ic_person"
             android:paddingHorizontal="80dp"
             style="@style/menuButton" />
 
         <Button
-            android:id="@+id/btn_material"
-            android:text="Material"
+            android:id="@+id/btn_materials"
+            android:text="Materiales"
             android:layout_marginBottom="20dp"
-            android:drawableLeft="@drawable/ic_post_add"
+            android:drawableLeft="@drawable/ic_list_bulleted"
             android:paddingHorizontal="80dp"
             style="@style/menuButton" />
 

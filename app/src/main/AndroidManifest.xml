@@ -17,6 +17,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.MyProvidersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.MyRequestsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.CreateProviderActivity"
             android:exported="false" />
         <activity

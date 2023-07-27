@@ -8,9 +8,11 @@
     tools:context=".ui.CreateProviderActivity">
 
     <LinearLayout
+        android:id="@+id/linear_layout_create_provider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/color_light_gray"
         android:layout_gravity="center_vertical"
         android:gravity="center_horizontal"
         android:paddingBottom="25dp">

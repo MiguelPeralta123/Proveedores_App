@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+        
+        <TextView
+            android:id="@+id/tv_nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Proveedor de prueba" />
+
+        <TextView
+            android:id="@+id/tv_empresa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sonorg" />
+
+        <TextView
+            android:id="@+id/tv_rfc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PEOJ9909266Y9" />
+
+        <TextView
+            android:id="@+id/tv_curp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PEOJ990926HSRRLS05" />
+        
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

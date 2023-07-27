@@ -19,6 +19,12 @@ class MenuActivity : AppCompatActivity() {
             goToNewRequest()
         }
 
+        // Handling my requests button
+        val btnGoToMyRequests = findViewById<Button>(R.id.btn_my_requests)
+        btnGoToMyRequests.setOnClickListener {
+            goToMyRequests()
+        }
+
         // Handling logout button
         val btnLogout = findViewById<Button>(R.id.btn_logout)
         btnLogout.setOnClickListener {
@@ -29,6 +35,11 @@ class MenuActivity : AppCompatActivity() {
 
     private fun goToNewRequest() {
         val i = Intent(this, NewRequestActivity::class.java)
+        startActivity(i)
+    }
+
+    private fun goToMyRequests() {
+        val i = Intent(this, MyRequestsActivity::class.java)
         startActivity(i)
     }
 
