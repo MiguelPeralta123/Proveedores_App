@@ -1,6 +1,6 @@
 package com.learning.proveedoresapp.model
 
-data class Provider(
+data class Proveedor(
     val empresa: String,
     val nombre: String,
     val rfc: String,

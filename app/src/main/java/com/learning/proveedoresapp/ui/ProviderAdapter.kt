@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.learning.proveedoresapp.R
-import com.learning.proveedoresapp.model.Provider
+import com.learning.proveedoresapp.model.Proveedor
 
-class ProviderAdapter(private val providers: ArrayList<Provider>) :
+class ProviderAdapter(private val providers: ArrayList<Proveedor>) :
     RecyclerView.Adapter<ProviderAdapter.ViewHolder>() {
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val tvEmpresa = itemView.findViewById<TextView>(R.id.tv_empresa)
