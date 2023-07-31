@@ -8,11 +8,14 @@ import com.learning.proveedoresapp.model.Grupo
 import com.learning.proveedoresapp.model.Moneda
 import com.learning.proveedoresapp.model.Pais
 import com.learning.proveedoresapp.model.Persona
+import com.learning.proveedoresapp.model.Proveedor
 import com.learning.proveedoresapp.model.RegimenCapital
 import com.learning.proveedoresapp.model.RegimenFiscal
 import com.learning.proveedoresapp.model.RetencionISR
 import com.learning.proveedoresapp.model.RetencionIVA
+import com.learning.proveedoresapp.model.TipoAlta
 import com.learning.proveedoresapp.model.TipoTercero
+import com.learning.proveedoresapp.model.UsoCFDI
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -34,6 +37,10 @@ interface ApiService {
     // Retrieving empresas from api
     @GET(value="empresas")
     fun getEmpresas(@Header(value="Authorization") authHeader: String): Call<ArrayList<Empresa>>
+
+    // Retrieving tipos de alta from api
+    @GET(value="tipo_alta")
+    fun getTiposAlta(@Header(value="Authorization") authHeader: String): Call<ArrayList<TipoAlta>>
 
     // Retrieving paises from api
     @GET(value="paises")
@@ -72,6 +79,10 @@ interface ApiService {
     @GET(value="regimen_capital")
     fun getRegimenCapital(@Header(value="Authorization") authHeader: String): Call<ArrayList<RegimenCapital>>
 
+    // Retrieving usos CFDI from api
+    @GET(value="uso_cfdi")
+    fun getUsoCFDI(@Header(value="Authorization") authHeader: String): Call<ArrayList<UsoCFDI>>
+
     // Retrieving bancos from api
     @GET(value="bancos")
     fun getBancos(@Header(value="Authorization") authHeader: String): Call<ArrayList<Banco>>
@@ -79,6 +90,10 @@ interface ApiService {
     // Retrieving monedas from api
     @GET(value="monedas")
     fun getMonedas(@Header(value="Authorization") authHeader: String): Call<ArrayList<Moneda>>
+
+    // Retrieving proveedores from api
+    @GET(value="proveedores")
+    fun getProveedores(@Header(value="Authorization") authHeader: String): Call<ArrayList<Proveedor>>
 
     companion object Factory {
         private const val BASE_URL = "http://192.168.1.6:89/api/"

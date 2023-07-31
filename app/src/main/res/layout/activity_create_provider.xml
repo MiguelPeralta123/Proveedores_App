@@ -55,6 +55,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
+                    <!-- Tipo alta field -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tipo alta"
+                        android:layout_marginTop="15dp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_tipo_alta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
                     <!-- RFC field -->
                     <TextView
                         android:layout_width="match_parent"
@@ -415,6 +427,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
+                    <!-- Uso CFDI field -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Uso CFDI"
+                        android:layout_marginTop="15dp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_uso_cfdi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
                     <!-- Banco field -->
                     <TextView
                         android:layout_width="match_parent"
@@ -586,6 +610,25 @@
 
                         <TextView
                             android:id="@+id/tv_empresa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tipo alta: "
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_tipo_alta"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
@@ -1137,6 +1180,25 @@
 
                         <TextView
                             android:id="@+id/tv_regimen_capital"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Uso CFDI: "
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_uso_cfdi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 

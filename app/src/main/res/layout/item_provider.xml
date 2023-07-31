@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="5dp"
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true">
@@ -14,30 +15,855 @@
         android:padding="10dp">
         
         <TextView
-            android:id="@+id/tv_nombre"
+            android:id="@+id/tv_nombre_fiscal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="Proveedor de prueba" />
 
-        <TextView
-            android:id="@+id/tv_empresa"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sonorg" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_rfc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="PEOJ9909266Y9" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Empresa: " />
 
-        <TextView
-            android:id="@+id/tv_curp"
+            <TextView
+                android:id="@+id/tv_empresa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sonorg" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="RFC: " />
+
+            <TextView
+                android:id="@+id/tv_rfc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PEOJ9909266Y9" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Fecha: " />
+
+            <TextView
+                android:id="@+id/tv_fecha_creacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="31-07-2023" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_show_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver mas"
+                android:layout_gravity="center" />
+
+            <ImageButton
+                android:id="@+id/ib_expand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_expand_less"
+                android:layout_gravity="end"
+                android:background="@color/white"
+                tools:src="@drawable/ic_expand_more" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_provider_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PEOJ990926HSRRLS05" />
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CURP: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_curp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre fiscal: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_nombre_fiscal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre comercial: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_nombre_comercial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calle: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_calle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Número exterior: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_numero_exterior"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Número interior: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_numero_interior"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Código postal: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_codigo_postal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="País: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_pais"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Estado: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_estado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Municipio: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_municipio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Localidad: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_localidad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Días crédito: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_dias_credito"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Límite crédito (moneda nacional): "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_limite_credito_mn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Límite crédito (moneda extranjera): "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_limite_credito_me"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teléfono 1: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_telefono_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teléfono 2: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_telefono_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contacto: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_contacto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Grupo: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_grupo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Correo contacto: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_correo_contacto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Correo pagos: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_correo_pagos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Página web: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_pagina_web"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Persona: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_persona"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo tercero: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_tipo_tercero"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ID fiscal: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_id_fiscal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Régimen fiscal: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_regimen_fiscal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Retención ISR: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_retencion_isr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Retención IVA: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_retencion_iva"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Régimen de capital: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_regimen_capital"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Banco: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_banco"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cuenta: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_cuenta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clabe: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_clabe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Moneda: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_moneda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Banco 2: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_banco_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cuenta 2: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_cuenta_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clabe 2: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_clabe_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Moneda 2: "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_moneda_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
         
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
+
+<!--
+    @SerializedName("tipo_alta") val tipoAlta: String,
+    val persona: String,
+    @SerializedName("razon_social") val razonSocial:String,
+    val rfc: String,
+    val curp: String,
+    @SerializedName("regimen_capital") val regimenCapital: String,
+    @SerializedName("nombre_fiscal") val nombreFiscal: String,
+    @SerializedName("nombre_comercial") val nombreComercial: String,
+    @SerializedName("uso_cfdi") val usoCFDI: String,
+    @SerializedName("representante_legal") val representanteLegal: String,
+    @SerializedName("telefono_1") val telefono1: String,
+    @SerializedName("telefono_2") val telefono2: String,
+    val contacto: String,
+    val grupo: String,
+    @SerializedName("correo_general") val correoGeneral: String,
+    @SerializedName("correo_pagos") val correoPagos: String,
+    @SerializedName("sitio_web") val sitioWeb: String,
+    val rubro: String,
+    @SerializedName("tipo_operacion") val tipoOperacion: String,
+    @SerializedName("tipo_tercero") val tipoTercero: String,
+    @SerializedName("id_fiscal") val idFiscal: String,
+    @SerializedName("regimen_fiscal") val regimenFiscal: String,
+    @SerializedName("agente_aduanal") val agenteAduanal: String,
+    @SerializedName("reg_inc_fiscal") val regIncFiscal: String,
+    @SerializedName("impuesto_cedular") val impuestoCedular: String,
+    @SerializedName("venc_s_fecha") val vencFecha: Date,
+    @SerializedName("dias_entrega_completa") val diasEntregaCompleta: Int,
+    @SerializedName("dias_credito") val diasCredito: Int,
+    @SerializedName("limite_credito_mn") val limiteCreditoMN: Double,
+    @SerializedName("limite_credito_me") val limiteCreditoME: Double,
+    @SerializedName("monto_credito") val montoCredito: Double,
+    @SerializedName("retencion_iva") val retencionIVA: String,
+    @SerializedName("retencion_isr") val retencionISR: String,
+    @SerializedName("iva_frontera") val ivaFrontera: String,
+    val calle: String,
+    @SerializedName("numero_exterior") val numeroExterior: String,
+    @SerializedName("numero_interior") val numeroInterior: String,
+    @SerializedName("codigo_postal") val codigoPostal: String,
+    val colonia: String,
+    val localidad: String,
+    val municipio: String,
+    val estado: String,
+    val pais: String,
+    val banco: String,
+    val cuenta: String,
+    val moneda: String,
+    val clabe: String,
+    @SerializedName("banco_2") val banco2: String,
+    @SerializedName("cuenta_2") val cuenta2: String,
+    @SerializedName("moneda_2") val moneda2: String,
+    @SerializedName("clabe_2") val clabe2: String,
+    @SerializedName("nombre_constancia") val nombreConstancia: String,
+    @SerializedName("ruta_constancia") val rutaConstancia: String,
+    @SerializedName("nombre_estado_cuenta") val nombreEstadoCuenta: String,
+    @SerializedName("ruta_estado_cuenta") val rutaEstadoCuenta: String,
+    @SerializedName("usar_portal_prov") val usarPortalProv: Boolean,
+    @SerializedName("no_aplica_rafaga") val noAplicaRafaga: Boolean,
+    @SerializedName("no_relacionar_oc") val noRelacionarOC: Boolean,
+    val folio: String,
+    val compras: Boolean,
+    val finanzas: Boolean,
+    val sistemas: Boolean,
+    val aprobado: Boolean,
+    @SerializedName("rechazado_compras") val rechazadoCompras: Boolean,
+    @SerializedName("rechazado_finanzas") val rechazadoFinanzas: Boolean,
+    @SerializedName("rechazado_sistemas") val rechazadoSistemas: Boolean,
+    val comentarios: String
+-->

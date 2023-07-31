@@ -29,9 +29,12 @@ import com.learning.proveedoresapp.model.RegimenCapital
 import com.learning.proveedoresapp.model.RegimenFiscal
 import com.learning.proveedoresapp.model.RetencionISR
 import com.learning.proveedoresapp.model.RetencionIVA
+import com.learning.proveedoresapp.model.TipoAlta
 import com.learning.proveedoresapp.model.TipoTercero
+import com.learning.proveedoresapp.model.UsoCFDI
 import com.learning.proveedoresapp.util.PreferenceHelper
 import com.learning.proveedoresapp.util.PreferenceHelper.get
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,7 +58,7 @@ class CreateProviderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_provider)
 
-        // Handling file uploads
+        // Handling constancia file upload
         val btnUploadConstancia = findViewById<Button>(R.id.btn_upload_constancia)
         btnUploadConstancia.setOnClickListener {
             val i = Intent(Intent.ACTION_GET_CONTENT)
@@ -63,7 +66,7 @@ class CreateProviderActivity : AppCompatActivity() {
             startActivityForResult(i, REQUEST_CODE_PICK_FILE)
         }
 
-        // Handling file uploads
+        // Handling estado de cuenta file upload
         val btnUploadEstadoCuenta = findViewById<Button>(R.id.btn_upload_estado_cuenta)
         btnUploadEstadoCuenta.setOnClickListener {
             val i = Intent(Intent.ACTION_GET_CONTENT)
@@ -75,17 +78,62 @@ class CreateProviderActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             // Field validation
             val linearLayoutCreateProvider = findViewById<LinearLayout>(R.id.linear_layout_create_provider)
-            val etNombre = findViewById<EditText>(R.id.et_nombre_fiscal)
+            val spinnerEmpresa = findViewById<Spinner>(R.id.spinner_empresa)
+            val spinnerTipoAlta = findViewById<Spinner>(R.id.spinner_tipo_alta)
             val etRfc = findViewById<EditText>(R.id.et_rfc)
+            val etNombreFiscal = findViewById<EditText>(R.id.et_nombre_fiscal)
+            val etCalle = findViewById<EditText>(R.id.et_calle)
+            val etNumeroExterior = findViewById<EditText>(R.id.et_numero_exterior)
+            val etCodigoPostal = findViewById<EditText>(R.id.et_codigo_postal)
+            val spinnerPais = findViewById<Spinner>(R.id.spinner_pais)
+            val spinnerEstado = findViewById<Spinner>(R.id.spinner_estado)
+            val etMunicipio = findViewById<EditText>(R.id.et_municipio)
+            val etLocalidad = findViewById<EditText>(R.id.et_localidad)
+            val etDiasCredito = findViewById<EditText>(R.id.et_dias_credito)
+            val etLimiteCreditoMN = findViewById<EditText>(R.id.et_limite_credito_mn)
+            val etLimiteCreditoME = findViewById<EditText>(R.id.et_limite_credito_me)
+            val etTelefono1 = findViewById<EditText>(R.id.et_telefono_1)
+            val spinnerGrupo = findViewById<Spinner>(R.id.spinner_grupo)
+            val etCorreoContacto = findViewById<EditText>(R.id.et_correo_contacto)
+            val etCorreoPagos = findViewById<EditText>(R.id.et_correo_pagos)
+            val spinnerPersona = findViewById<Spinner>(R.id.spinner_persona)
+            val spinnerTipoTercero = findViewById<Spinner>(R.id.spinner_tipo_tercero)
+            val etIdFiscal = findViewById<EditText>(R.id.et_id_fiscal)
+            val spinnerRegimenFiscal = findViewById<Spinner>(R.id.spinner_regimen_fiscal)
+            val spinnerRetencionISR = findViewById<Spinner>(R.id.spinner_isr_ret)
+            val spinnerRetencionIVA = findViewById<Spinner>(R.id.spinner_iva_ret)
+            val spinnerRegimenCapital = findViewById<Spinner>(R.id.spinner_regimen_capital)
+            val spinnerUsoCFDI = findViewById<Spinner>(R.id.spinner_uso_cfdi)
+            val spinnerBanco = findViewById<Spinner>(R.id.spinner_banco)
             val etCuenta = findViewById<EditText>(R.id.et_cuenta)
             val etClabe = findViewById<EditText>(R.id.et_clabe)
+            val spinnerMoneda = findViewById<Spinner>(R.id.spinner_moneda)
 
-            etNombre.error = if (etNombre.text.toString().isEmpty()) "Campo obligatorio" else null
             etRfc.error = if (etRfc.text.toString().isEmpty()) "Campo obligatorio" else null
+            etNombreFiscal.error = if (etNombreFiscal.text.toString().isEmpty()) "Campo obligatorio" else null
+            etCalle.error = if (etCalle.text.toString().isEmpty()) "Campo obligatorio" else null
+            etNumeroExterior.error = if (etNumeroExterior.text.toString().isEmpty()) "Campo obligatorio" else null
+            etCodigoPostal.error = if (etCodigoPostal.text.toString().isEmpty()) "Campo obligatorio" else null
+            etMunicipio.error = if (etMunicipio.text.toString().isEmpty()) "Campo obligatorio" else null
+            etLocalidad.error = if (etLocalidad.text.toString().isEmpty()) "Campo obligatorio" else null
+            etDiasCredito.error = if (etDiasCredito.text.toString().isEmpty()) "Campo obligatorio" else null
+            etLimiteCreditoMN.error = if (etLimiteCreditoMN.text.toString().isEmpty()) "Campo obligatorio" else null
+            etLimiteCreditoME.error = if (etLimiteCreditoME.text.toString().isEmpty()) "Campo obligatorio" else null
+            etTelefono1.error = if (etTelefono1.text.toString().isEmpty()) "Campo obligatorio" else null
+            etCorreoContacto.error = if (etCorreoContacto.text.toString().isEmpty()) "Campo obligatorio" else null
+            etCorreoPagos.error = if (etCorreoPagos.text.toString().isEmpty()) "Campo obligatorio" else null
+            etIdFiscal.error = if (etIdFiscal.text.toString().isEmpty()) "Campo obligatorio" else null
             etCuenta.error = if (etCuenta.text.toString().isEmpty()) "Campo obligatorio" else null
             etClabe.error = if (etClabe.text.toString().isEmpty()) "Campo obligatorio" else null
 
-            if (etNombre.error != null || etRfc.error != null || etCuenta.error != null || etClabe.error != null) {
+            if (etRfc.error != null || etNombreFiscal.error != null ||
+                etCalle.error != null || etNumeroExterior.error != null || etCodigoPostal.error != null ||
+                etMunicipio.error != null || etLocalidad.error != null || etDiasCredito.error != null ||
+                etLimiteCreditoMN != null || etLimiteCreditoME.error != null || etTelefono1.error != null ||
+                etCorreoContacto.error != null ||
+                etCorreoPagos.error != null ||
+                etIdFiscal.error != null ||
+                etCuenta.error != null || etClabe.error != null) {
                 Snackbar.make(linearLayoutCreateProvider, "La solicitud contiene campos incorrectos",
                     Snackbar.LENGTH_SHORT).show()
             }
@@ -115,6 +163,7 @@ class CreateProviderActivity : AppCompatActivity() {
 
         // Adding data to spinners
         loadEmpresas()
+        loadTiposAlta()
         loadPaises()
         listenPaisChange()
         loadGrupos()
@@ -124,6 +173,7 @@ class CreateProviderActivity : AppCompatActivity() {
         loadRetencionISR()
         loadRetencionIVA()
         loadRegimenCapital()
+        loadUsoCFDI()
         loadBancos()
         loadMonedas()
     }
@@ -160,6 +210,32 @@ class CreateProviderActivity : AppCompatActivity() {
             }
             override fun onFailure(call: Call<ArrayList<Empresa>>, t: Throwable) {
                 Toast.makeText(this@CreateProviderActivity, "Se produjo un error al cargar las empresas",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    // Adding data to TipoAlta spinner
+    private fun loadTiposAlta() {
+        // Getting jwt from preferencies
+        val jwt = preferences["jwt", ""]
+        val spinnerTipoAlta = findViewById<Spinner>(R.id.spinner_tipo_alta)
+        val call = apiService.getTiposAlta("Bearer $jwt")
+        call.enqueue(object: Callback<ArrayList<TipoAlta>> {
+            override fun onResponse(
+                call: Call<ArrayList<TipoAlta>>,
+                response: Response<ArrayList<TipoAlta>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        val tipos = it.toMutableList()
+                        spinnerTipoAlta.adapter = ArrayAdapter(this@CreateProviderActivity,
+                            android.R.layout.simple_list_item_1, tipos)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<TipoAlta>>, t: Throwable) {
+                Toast.makeText(this@CreateProviderActivity, "Se produjo un error al cargar los tipos de alta",
                     Toast.LENGTH_SHORT).show()
             }
         })
@@ -412,6 +488,32 @@ class CreateProviderActivity : AppCompatActivity() {
         })
     }
 
+    // Adding data to UsoCFDI spinner
+    private fun loadUsoCFDI() {
+        // Getting jwt from preferencies
+        val jwt = preferences["jwt", ""]
+        val spinnerUsoCFDI = findViewById<Spinner>(R.id.spinner_uso_cfdi)
+        val call = apiService.getUsoCFDI("Bearer $jwt")
+        call.enqueue(object: Callback<ArrayList<UsoCFDI>> {
+            override fun onResponse(
+                call: Call<ArrayList<UsoCFDI>>,
+                response: Response<ArrayList<UsoCFDI>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        val nombres = it.toMutableList()
+                        spinnerUsoCFDI.adapter = ArrayAdapter(this@CreateProviderActivity,
+                            android.R.layout.simple_list_item_1, nombres)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<UsoCFDI>>, t: Throwable) {
+                Toast.makeText(this@CreateProviderActivity, "Se produjo un error al cargar los usos CFDI",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     // Adding data to Banco spinner
     private fun loadBancos() {
         // Getting jwt from preferencies
@@ -472,6 +574,7 @@ class CreateProviderActivity : AppCompatActivity() {
 
     private fun loadConfirmData() {
         val spinnerEmpresa = findViewById<Spinner>(R.id.spinner_empresa)
+        val spinnerTipoAlta = findViewById<Spinner>(R.id.spinner_tipo_alta)
         val etRfc = findViewById<EditText>(R.id.et_rfc)
         val etCurp = findViewById<EditText>(R.id.et_curp)
         val etNombreFiscal = findViewById<EditText>(R.id.et_nombre_fiscal)
@@ -501,6 +604,7 @@ class CreateProviderActivity : AppCompatActivity() {
         val spinnerRetencionISR = findViewById<Spinner>(R.id.spinner_isr_ret)
         val spinnerRetencionIVA = findViewById<Spinner>(R.id.spinner_iva_ret)
         val spinnerRegimenCapital = findViewById<Spinner>(R.id.spinner_regimen_capital)
+        val spinnerUsoCFDI = findViewById<Spinner>(R.id.spinner_uso_cfdi)
         val spinnerBanco = findViewById<Spinner>(R.id.spinner_banco)
         val etCuenta = findViewById<EditText>(R.id.et_cuenta)
         val etClabe = findViewById<EditText>(R.id.et_clabe)
@@ -512,6 +616,7 @@ class CreateProviderActivity : AppCompatActivity() {
 
         // TextViews
         val tvEmpresa = findViewById<TextView>(R.id.tv_empresa)
+        val tvTipoAlta = findViewById<TextView>(R.id.tv_tipo_alta)
         val tvRfc = findViewById<TextView>(R.id.tv_rfc)
         val tvCurp = findViewById<TextView>(R.id.tv_curp)
         val tvNombreFiscal = findViewById<TextView>(R.id.tv_nombre_fiscal)
@@ -541,6 +646,7 @@ class CreateProviderActivity : AppCompatActivity() {
         val tvRetencionISR = findViewById<TextView>(R.id.tv_retencion_isr)
         val tvRetencionIVA = findViewById<TextView>(R.id.tv_retencion_iva)
         val tvRegimenCapital = findViewById<TextView>(R.id.tv_regimen_capital)
+        val tvUsoCFDI = findViewById<TextView>(R.id.tv_uso_cfdi)
         val tvBanco = findViewById<TextView>(R.id.tv_banco)
         val tvCuenta = findViewById<TextView>(R.id.tv_cuenta)
         val tvClabe = findViewById<TextView>(R.id.tv_clabe)
@@ -551,6 +657,7 @@ class CreateProviderActivity : AppCompatActivity() {
         val tvMoneda2 = findViewById<TextView>(R.id.tv_moneda_2)
 
         tvEmpresa.text = spinnerEmpresa.selectedItem.toString()
+        tvTipoAlta.text = spinnerTipoAlta.selectedItem.toString()
         tvRfc.text = etRfc.text.toString()
         tvCurp.text = etCurp.text.toString()
         tvNombreFiscal.text = etNombreFiscal.text.toString()
@@ -580,6 +687,7 @@ class CreateProviderActivity : AppCompatActivity() {
         tvRetencionISR.text = spinnerRetencionISR.selectedItem.toString()
         tvRetencionIVA.text = spinnerRetencionIVA.selectedItem.toString()
         tvRegimenCapital.text = spinnerRegimenCapital.selectedItem.toString()
+        tvUsoCFDI.text = spinnerUsoCFDI.selectedItem.toString()
         tvBanco.text = spinnerBanco.selectedItem.toString()
         tvCuenta.text = etCuenta.text.toString()
         tvClabe.text = etClabe.text.toString()
