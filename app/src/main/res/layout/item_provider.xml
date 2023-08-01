@@ -19,12 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Proveedor de prueba" />
+            android:textStyle="bold"
+            android:text="Nombre fiscal" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -36,7 +38,7 @@
                 android:id="@+id/tv_empresa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sonorg" />
+                android:text="Empresa" />
 
         </LinearLayout>
 
@@ -56,7 +58,7 @@
                 android:id="@+id/tv_rfc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PEOJ9909266Y9" />
+                android:text="AAAA000000123" />
 
         </LinearLayout>
 
@@ -80,34 +82,20 @@
 
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/tv_show_more"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ver mas"
-                android:layout_gravity="center" />
-
-            <ImageButton
-                android:id="@+id/ib_expand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_expand_less"
-                android:layout_gravity="end"
-                android:background="@color/white"
-                tools:src="@drawable/ic_expand_more" />
-
-        </FrameLayout>
-
+        <!-- See more button -->
         <LinearLayout
             android:id="@+id/linear_layout_provider_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone">
+
+            <!-- Top border -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginVertical="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -122,25 +110,6 @@
 
                 <TextView
                     android:id="@+id/tv_curp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nombre fiscal: "
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_nombre_fiscal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -793,6 +762,28 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/tv_see_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver mas"
+                android:layout_gravity="center" />
+
+            <ImageButton
+                android:id="@+id/ib_expand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_expand_more"
+                android:layout_gravity="end"
+                android:background="@color/white"
+                tools:src="@drawable/ic_expand_less" />
+        </FrameLayout>
         
     </LinearLayout>
 

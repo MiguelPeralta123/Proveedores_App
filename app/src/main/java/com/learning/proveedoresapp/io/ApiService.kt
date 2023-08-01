@@ -92,7 +92,7 @@ interface ApiService {
     fun getMonedas(@Header(value="Authorization") authHeader: String): Call<ArrayList<Moneda>>
 
     // Retrieving proveedores from api
-    @GET(value="proveedores")
+    @GET(value="proveedores/22")
     fun getProveedores(@Header(value="Authorization") authHeader: String): Call<ArrayList<Proveedor>>
 
     companion object Factory {
