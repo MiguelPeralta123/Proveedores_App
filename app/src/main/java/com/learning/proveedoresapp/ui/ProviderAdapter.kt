@@ -77,6 +77,17 @@ class ProviderAdapter:
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    fun parseDate(apiDateString: String): String {
+        // Parse the API date string into a LocalDateTime object
+        val apiDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
+        val localDateTime = LocalDateTime.parse(apiDateString, apiDateFormatter)
+
+        // Format the LocalDateTime object into the desired string format
+        val outputDateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+        return localDateTime.format(outputDateFormatter)
+    }
+
+    /*@RequiresApi(Build.VERSION_CODES.O)
     fun parseDate(dateString: String): String {
         // Parse the API date string into a LocalDateTime object
         val apiDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
@@ -85,5 +96,5 @@ class ProviderAdapter:
         // Format the LocalDateTime object into the desired string format
         val outputDateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")
         return localDateTime.format(outputDateFormatter)
-    }
+    }*/
 }

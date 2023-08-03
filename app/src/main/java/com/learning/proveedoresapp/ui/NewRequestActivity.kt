@@ -16,6 +16,11 @@ class NewRequestActivity : AppCompatActivity() {
             goToCreateProvider()
         }
 
+        val btnMaterial = findViewById<Button>(R.id.btn_material)
+        btnMaterial.setOnClickListener {
+            goToCreateMaterial()
+        }
+
         val btnGoBack = findViewById<Button>(R.id.btn_menu)
         btnGoBack.setOnClickListener {
             goToMenu()
@@ -24,6 +29,12 @@ class NewRequestActivity : AppCompatActivity() {
 
     private fun goToCreateProvider() {
         val i = Intent(this, CreateProviderActivity::class.java)
+        startActivity(i)
+        finish()
+    }
+
+    private fun goToCreateMaterial() {
+        val i = Intent(this, CreateMaterialActivity::class.java)
         startActivity(i)
         finish()
     }

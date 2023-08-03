@@ -2,8 +2,10 @@ package com.learning.proveedoresapp.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -18,6 +20,7 @@ import androidx.cardview.widget.CardView
 import com.google.android.material.snackbar.Snackbar
 import com.learning.proveedoresapp.R
 import com.learning.proveedoresapp.io.ApiService
+import com.learning.proveedoresapp.io.response.SimpleResponse
 import com.learning.proveedoresapp.model.Banco
 import com.learning.proveedoresapp.model.Empresa
 import com.learning.proveedoresapp.model.Estado
@@ -34,10 +37,16 @@ import com.learning.proveedoresapp.model.TipoTercero
 import com.learning.proveedoresapp.model.UsoCFDI
 import com.learning.proveedoresapp.util.PreferenceHelper
 import com.learning.proveedoresapp.util.PreferenceHelper.get
+import okhttp3.MultipartBody
 import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Field
+import java.io.File
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 
 class CreateProviderActivity : AppCompatActivity() {
 
@@ -50,9 +59,8 @@ class CreateProviderActivity : AppCompatActivity() {
     }
 
     // Handling file uploads
-    companion object {
-        private const val REQUEST_CODE_PICK_FILE = 101
-    }
+    private lateinit var constanciaPart: MultipartBody.Part
+    private lateinit var estadoCuentaPart: MultipartBody.Part
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +71,7 @@ class CreateProviderActivity : AppCompatActivity() {
         btnUploadConstancia.setOnClickListener {
             val i = Intent(Intent.ACTION_GET_CONTENT)
             i.type = "application/pdf,image/*" // Allow PDFs and images
-            startActivityForResult(i, REQUEST_CODE_PICK_FILE)
+            startActivityForResult(i, REQUEST_CODE_PICK_CONSTANCIA)
         }
 
         // Handling estado de cuenta file upload
@@ -71,7 +79,7 @@ class CreateProviderActivity : AppCompatActivity() {
         btnUploadEstadoCuenta.setOnClickListener {
             val i = Intent(Intent.ACTION_GET_CONTENT)
             i.type = "application/pdf,image/*" // Allow PDFs and images
-            startActivityForResult(i, REQUEST_CODE_PICK_FILE)
+            startActivityForResult(i, REQUEST_CODE_PICK_ESTADO_CUENTA)
         }
 
         val btnSave = findViewById<Button>(R.id.btn_save)
@@ -109,7 +117,11 @@ class CreateProviderActivity : AppCompatActivity() {
             val etClabe = findViewById<EditText>(R.id.et_clabe)
             val spinnerMoneda = findViewById<Spinner>(R.id.spinner_moneda)
 
-            etRfc.error = if (etRfc.text.toString().isEmpty()) "Campo obligatorio" else null
+            if (etRfc.text.toString().isEmpty()) {
+                etRfc.error = "Campo obligatorio"
+            } else {
+                etRfc.error = null
+            }
             etNombreFiscal.error = if (etNombreFiscal.text.toString().isEmpty()) "Campo obligatorio" else null
             etCalle.error = if (etCalle.text.toString().isEmpty()) "Campo obligatorio" else null
             etNumeroExterior.error = if (etNumeroExterior.text.toString().isEmpty()) "Campo obligatorio" else null
@@ -126,14 +138,18 @@ class CreateProviderActivity : AppCompatActivity() {
             etCuenta.error = if (etCuenta.text.toString().isEmpty()) "Campo obligatorio" else null
             etClabe.error = if (etClabe.text.toString().isEmpty()) "Campo obligatorio" else null
 
-            if (etRfc.error != null || etNombreFiscal.error != null ||
-                etCalle.error != null || etNumeroExterior.error != null || etCodigoPostal.error != null ||
-                etMunicipio.error != null || etLocalidad.error != null || etDiasCredito.error != null ||
-                etLimiteCreditoMN != null || etLimiteCreditoME.error != null || etTelefono1.error != null ||
-                etCorreoContacto.error != null ||
-                etCorreoPagos.error != null ||
-                etIdFiscal.error != null ||
-                etCuenta.error != null || etClabe.error != null) {
+            // If all fields are correct, go to confirm view
+            val cvCreateProvider = findViewById<CardView>(R.id.cv_create_provider)
+            val cvConfirmData = findViewById<CardView>(R.id.cv_confirm_data)
+            loadConfirmData()
+            cvCreateProvider.visibility = View.GONE
+            cvConfirmData.visibility = View.VISIBLE
+
+            /*if (etRfc.error != null || etNombreFiscal.error != null || etCalle.error != null || etNumeroExterior.error !=
+                null || etCodigoPostal.error != null || etMunicipio.error != null || etLocalidad.error != null ||
+                etDiasCredito.error != null || etLimiteCreditoMN != null || etLimiteCreditoME.error != null ||
+                etTelefono1.error != null || etCorreoContacto.error != null || etCorreoPagos.error != null ||
+                etIdFiscal.error != null || etCuenta.error != null || etClabe.error != null) {
                 Snackbar.make(linearLayoutCreateProvider, "La solicitud contiene campos incorrectos",
                     Snackbar.LENGTH_SHORT).show()
             }
@@ -144,7 +160,7 @@ class CreateProviderActivity : AppCompatActivity() {
                 loadConfirmData()
                 cvCreateProvider.visibility = View.GONE
                 cvConfirmData.visibility = View.VISIBLE
-            }
+            }*/
         }
 
         val btnModify = findViewById<Button>(R.id.btn_modify)
@@ -157,8 +173,7 @@ class CreateProviderActivity : AppCompatActivity() {
 
         val btnConfirm = findViewById<Button>(R.id.btn_confirm)
         btnConfirm.setOnClickListener {
-            Toast.makeText(applicationContext, "Solicitud guardada con exito", Toast.LENGTH_SHORT).show()
-            finish()
+            performPostProveedor()
         }
 
         // Adding data to spinners
@@ -181,12 +196,125 @@ class CreateProviderActivity : AppCompatActivity() {
     // Handling file uploads
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_PICK_FILE && resultCode == Activity.RESULT_OK) {
-            val selectedFileUri = data?.data
-            // Handle the selected file URI here
-            // For example, you might want to upload the file to a server or process it in some way.
-            Toast.makeText(this@CreateProviderActivity, "Archivo añadido", Toast.LENGTH_SHORT).show()
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_PICK_CONSTANCIA -> {
+                    val fileUri = data?.data
+                    fileUri?.let {
+                        val fileName = getFileName(it)
+                        val file = File(cacheDir, fileName)
+                        val fileRequestBody = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                        constanciaPart = MultipartBody.Part.createFormData("constancia", fileName, fileRequestBody)
+                    }
+                }
+                REQUEST_CODE_PICK_ESTADO_CUENTA -> {
+                    val fileUri = data?.data
+                    fileUri?.let {
+                        val fileName = getFileName(it)
+                        val file = File(cacheDir, fileName)
+                        val fileRequestBody = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                        estadoCuentaPart = MultipartBody.Part.createFormData("estado_cuenta", fileName, fileRequestBody)
+                    }
+                }
+            }
         }
+    }
+
+    // Helper method to get the actual file name from URI
+    private fun getFileName(uri: Uri): String {
+        val cursor = contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (nameIndex != -1) {
+                    return it.getString(nameIndex)
+                }
+            }
+        }
+        return "file"
+    }
+
+    companion object {
+        private const val REQUEST_CODE_PICK_CONSTANCIA = 1
+        private const val REQUEST_CODE_PICK_ESTADO_CUENTA = 2
+    }
+
+    private fun performPostProveedor() {
+        // Confirm button
+        val btnConfirm = findViewById<Button>(R.id.btn_confirm)
+        btnConfirm.isClickable = false
+
+        val jwt = preferences["jwt", ""]
+        val authorization = "Bearer $jwt"
+
+        // Proveedor fields
+        val empresa = findViewById<TextView>(R.id.tv_empresa).text.toString()
+        val tipoAlta = findViewById<TextView>(R.id.tv_tipo_alta).text.toString()
+        val rfc = findViewById<TextView>(R.id.tv_rfc).text.toString()
+        val curp = findViewById<TextView>(R.id.tv_curp).text.toString()
+        val nombreFiscal = findViewById<TextView>(R.id.tv_nombre_fiscal).text.toString()
+        val nombreComercial = findViewById<TextView>(R.id.tv_nombre_comercial).text.toString()
+        val calle = findViewById<TextView>(R.id.tv_calle).text.toString()
+        val numeroExterior = findViewById<TextView>(R.id.tv_numero_exterior).text.toString()
+        val numeroInterior = findViewById<TextView>(R.id.tv_numero_interior).text.toString()
+        val codigoPostal = findViewById<TextView>(R.id.tv_codigo_postal).text.toString()
+        val pais = findViewById<TextView>(R.id.tv_pais).text.toString()
+        val estado = findViewById<TextView>(R.id.tv_estado).text.toString()
+        val municipio = findViewById<TextView>(R.id.tv_municipio).text.toString()
+        val localidad = findViewById<TextView>(R.id.tv_localidad).text.toString()
+        val diasCredito = findViewById<TextView>(R.id.tv_dias_credito).text.toString().toInt()
+        val limiteCreditoMN = findViewById<TextView>(R.id.tv_limite_credito_mn).text.toString().toDouble()
+        val limiteCreditoME = findViewById<TextView>(R.id.tv_limite_credito_me).text.toString().toDouble()
+        val telefono1 = findViewById<TextView>(R.id.tv_telefono_1).text.toString()
+        val telefono2 = findViewById<TextView>(R.id.tv_telefono_2).text.toString()
+        val contacto = findViewById<TextView>(R.id.tv_contacto).text.toString()
+        val grupo = findViewById<TextView>(R.id.tv_grupo).text.toString()
+        val correoContacto = findViewById<TextView>(R.id.tv_correo_contacto).text.toString()
+        val correoPagos = findViewById<TextView>(R.id.tv_correo_pagos).text.toString()
+        val sitioWeb = findViewById<TextView>(R.id.tv_pagina_web).text.toString()
+        val persona = findViewById<TextView>(R.id.tv_persona).text.toString()
+        val tipoTercero = findViewById<TextView>(R.id.tv_tipo_tercero).text.toString()
+        val idFiscal = findViewById<TextView>(R.id.tv_id_fiscal).text.toString()
+        val regimenFiscal = findViewById<TextView>(R.id.tv_regimen_fiscal).text.toString()
+        val retencionISR = findViewById<TextView>(R.id.tv_retencion_isr).text.toString()
+        val retencionIVA = findViewById<TextView>(R.id.tv_retencion_iva).text.toString()
+        val regimenCapital = findViewById<TextView>(R.id.tv_regimen_capital).text.toString()
+        val usoCFDI = findViewById<TextView>(R.id.tv_uso_cfdi).text.toString()
+        val banco = findViewById<TextView>(R.id.tv_banco).text.toString()
+        val cuenta = findViewById<TextView>(R.id.tv_cuenta).text.toString()
+        val clabe = findViewById<TextView>(R.id.tv_clabe).text.toString()
+        val moneda = findViewById<TextView>(R.id.tv_moneda).text.toString()
+        val banco2 = findViewById<TextView>(R.id.tv_banco_2).text.toString()
+        val cuenta2 = findViewById<TextView>(R.id.tv_cuenta_2).text.toString()
+        val clabe2 = findViewById<TextView>(R.id.tv_clabe_2).text.toString()
+        val moneda2 = findViewById<TextView>(R.id.tv_moneda_2).text.toString()
+
+        // Performing postProveedor method
+        val call = apiService.postProveedor(authorization, empresa, tipoAlta, persona, rfc, curp, regimenCapital,
+            nombreFiscal, nombreComercial, usoCFDI, telefono1, telefono2, contacto, grupo, correoContacto, correoPagos,
+            sitioWeb, tipoTercero, idFiscal, regimenFiscal,  diasCredito, limiteCreditoMN, limiteCreditoME, retencionIVA,
+            retencionISR, calle, numeroExterior, numeroInterior, codigoPostal, localidad, municipio, estado, pais,
+            banco, cuenta, moneda, clabe, banco2, cuenta2, moneda2, clabe2, constanciaPart, estadoCuentaPart)
+        call.enqueue(object: Callback<SimpleResponse> {
+            override fun onResponse(
+                call: Call<SimpleResponse>,
+                response: Response<SimpleResponse>
+            ) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@CreateProviderActivity, "Solicitud registrada con exito", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    Toast.makeText(this@CreateProviderActivity, "Error al registrar la solicitud de proveedor", Toast.LENGTH_SHORT).show()
+                    btnConfirm.isClickable = true
+                }
+            }
+
+            override fun onFailure(call: Call<SimpleResponse>, t: Throwable) {
+                Toast.makeText(this@CreateProviderActivity, "Error al registrar la solicitud de proveedor", Toast.LENGTH_SHORT).show()
+                btnConfirm.isClickable = true
+            }
+
+        })
     }
 
     // Adding data to Empresa spinner
