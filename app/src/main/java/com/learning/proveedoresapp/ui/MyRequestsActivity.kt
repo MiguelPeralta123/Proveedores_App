@@ -16,6 +16,11 @@ class MyRequestsActivity : AppCompatActivity() {
             goToMyProviders()
         }
 
+        val btnMaterials = findViewById<Button>(R.id.btn_materials)
+        btnMaterials.setOnClickListener {
+            goToMyMaterials()
+        }
+
         val btnGoBack = findViewById<Button>(R.id.btn_menu)
         btnGoBack.setOnClickListener {
             goToMenu()
@@ -24,6 +29,12 @@ class MyRequestsActivity : AppCompatActivity() {
 
     private fun goToMyProviders() {
         val i = Intent(this, MyProvidersActivity::class.java)
+        startActivity(i)
+        finish()
+    }
+
+    private fun goToMyMaterials() {
+        val i = Intent(this, MyMaterialsActivity::class.java)
         startActivity(i)
         finish()
     }

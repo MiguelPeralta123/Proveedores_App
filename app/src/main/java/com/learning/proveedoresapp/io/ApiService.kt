@@ -7,6 +7,7 @@ import com.learning.proveedoresapp.model.Empresa
 import com.learning.proveedoresapp.model.Estado
 import com.learning.proveedoresapp.model.Familia
 import com.learning.proveedoresapp.model.Grupo
+import com.learning.proveedoresapp.model.Material
 import com.learning.proveedoresapp.model.MaterialTipoAlta
 import com.learning.proveedoresapp.model.Moneda
 import com.learning.proveedoresapp.model.Pais
@@ -175,6 +176,10 @@ interface ApiService {
     @GET(value="material_unidades/{tipo_alta}")
     fun getUnidades(@Path(value="tipo_alta") tipoAlta: String, @Header(value="Authorization") authHeader: String):
             Call<ArrayList<Unidad>>
+
+    // Retrieving materiales from api
+    @GET(value="materiales")
+    fun getMateriales(@Header(value="Authorization") authHeader: String): Call<ArrayList<Material>>
 
     @FormUrlEncoded
     @POST("materiales")
