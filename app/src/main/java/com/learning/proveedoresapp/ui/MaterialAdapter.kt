@@ -69,7 +69,8 @@ class MaterialAdapter:
 
             holder.tvNombre.text = material.nombre
             holder.tvEmpresa.text = material.empresa
-            holder.tvFecha.text = parseDate(material.fechaCreacion)
+            //holder.tvFecha.text = parseDate(material.fechaCreacion)
+            holder.tvFecha.text = material.fechaCreacion
             holder.tvTipoAlta.text = material.tipoAlta
 
             // Show details
@@ -108,7 +109,7 @@ class MaterialAdapter:
             }
         }
 
-        @RequiresApi(Build.VERSION_CODES.O)
+        /*@RequiresApi(Build.VERSION_CODES.O)
         fun parseDate(apiDateString: String): String {
             // Parse the API date string into a LocalDateTime object
             val apiDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
@@ -117,5 +118,5 @@ class MaterialAdapter:
             // Format the LocalDateTime object into the desired string format
             val outputDateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
             return localDateTime.format(outputDateFormatter)
-        }
+        }*/
 }
