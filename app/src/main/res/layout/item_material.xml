@@ -15,6 +15,12 @@
         android:padding="10dp">
 
         <TextView
+            android:id="@+id/tv_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/tv_nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -418,6 +424,15 @@
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
+
+            <!-- Modify button -->
+            <Button
+                android:id="@+id/btn_modify_material"
+                android:text="Modificar"
+                android:layout_marginTop="15dp"
+                android:drawableRight="@drawable/ic_next"
+                android:paddingHorizontal="50dp"
+                style="@style/saveButton" />
 
         </LinearLayout>
 

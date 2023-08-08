@@ -207,8 +207,13 @@ interface ApiService {
         @Field("es_prod_terminado") esProdTerminado: Boolean,
     ): Call<SimpleResponse>
 
+    // Retrieving material from api
+    @GET(value="materiales/{id}")
+    fun getMaterialById(@Path(value="id") id: Int, @Header(value="Authorization") authHeader: String):
+            Call<ArrayList<Material>>
+
     companion object Factory {
-        private const val BASE_URL = "http://192.168.1.5:89/api/"
+        private const val BASE_URL = "http://192.168.1.6:89/api/"
         fun create(): ApiService {
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
