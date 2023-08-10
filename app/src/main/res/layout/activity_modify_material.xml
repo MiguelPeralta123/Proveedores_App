@@ -34,7 +34,7 @@
             android:elevation="8dp"
             android:layout_marginHorizontal="25dp"
             app:contentPadding="15dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -63,10 +63,35 @@
                         android:text="Empresa"
                         android:layout_marginTop="15dp" />
 
-                    <Spinner
-                        android:id="@+id/spinner_empresa"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_edit_empresa"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="30dp" />
+
+                        <Spinner
+                            android:id="@+id/spinner_empresa"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="30dp"
+                            android:visibility="gone" />
+
+                        <ImageButton
+                            android:id="@+id/ib_edit_empresa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_edit"
+                            android:layout_gravity="end|center_vertical"
+                            android:background="@color/color_btn"
+                            tools:src="@drawable/ic_check" />
+                    </FrameLayout>
 
                     <!-- Nombre field -->
                     <TextView
@@ -84,12 +109,38 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tipo de alta" />
+                        android:text="Tipo de alta"
+                        android:layout_marginTop="15dp" />
 
-                    <Spinner
-                        android:id="@+id/spinner_material_tipo_alta"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_edit_tipo_alta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="30dp" />
+
+                        <Spinner
+                            android:id="@+id/spinner_material_tipo_alta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="30dp"
+                            android:visibility="gone" />
+
+                        <ImageButton
+                            android:id="@+id/ib_edit_tipo_alta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_edit"
+                            android:layout_gravity="end|center_vertical"
+                            android:background="@color/color_btn"
+                            tools:src="@drawable/ic_check" />
+                    </FrameLayout>
 
                     <!-- Familia field -->
                     <TextView
@@ -98,10 +149,35 @@
                         android:text="Familia"
                         android:layout_marginTop="15dp" />
 
-                    <Spinner
-                        android:id="@+id/spinner_familia"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_edit_familia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="30dp" />
+
+                        <Spinner
+                            android:id="@+id/spinner_familia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="30dp"
+                            android:visibility="gone" />
+
+                        <ImageButton
+                            android:id="@+id/ib_edit_familia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_edit"
+                            android:layout_gravity="end|center_vertical"
+                            android:background="@color/color_btn"
+                            tools:src="@drawable/ic_check" />
+                    </FrameLayout>
 
                     <!-- Subfamilia field -->
                     <TextView
@@ -110,10 +186,35 @@
                         android:text="Subfamilia"
                         android:layout_marginTop="15dp" />
 
-                    <Spinner
-                        android:id="@+id/spinner_subfamilia"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_edit_subfamilia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="30dp" />
+
+                        <Spinner
+                            android:id="@+id/spinner_subfamilia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="30dp"
+                            android:visibility="gone" />
+
+                        <ImageButton
+                            android:id="@+id/ib_edit_subfamilia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_edit"
+                            android:layout_gravity="end|center_vertical"
+                            android:background="@color/color_btn"
+                            tools:src="@drawable/ic_check" />
+                    </FrameLayout>
 
                     <!-- Marca field -->
                     <TextView
@@ -207,10 +308,35 @@
                         android:text="Unidad"
                         android:layout_marginTop="15dp" />
 
-                    <Spinner
-                        android:id="@+id/spinner_unidad"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_edit_unidad"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="30dp" />
+
+                        <Spinner
+                            android:id="@+id/spinner_unidad"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="30dp"
+                            android:visibility="gone" />
+
+                        <ImageButton
+                            android:id="@+id/ib_edit_unidad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_edit"
+                            android:layout_gravity="end|center_vertical"
+                            android:background="@color/color_btn"
+                            tools:src="@drawable/ic_check"/>
+                    </FrameLayout>
 
                     <!-- % IVA field -->
                     <TextView
@@ -272,6 +398,69 @@
                         android:layout_marginLeft="5dp"
                         android:text="¿Es producto terminado?" />
 
+                    <!-- Aprobado compras field -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Aprobado compras: "
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_aprob_compras"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No" />
+
+                    </LinearLayout>
+
+                    <!-- Aprobado finanzas field -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Aprobado finanzas: "
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_aprob_finanzas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No" />
+
+                    </LinearLayout>
+
+                    <!-- Aprobado sistemas field -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Aprobado sistemas: "
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_aprob_sistemas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No" />
+
+                    </LinearLayout>
+
                     <!-- Comentarios field -->
                     <TextView
                         android:layout_width="match_parent"
@@ -298,7 +487,7 @@
                         android:id="@+id/btn_decline"
                         android:text="Rechazar"
                         android:layout_marginTop="15dp"
-                        android:drawableLeft="@drawable/ic_arrow_back"
+                        android:drawableLeft="@drawable/ic_decline"
                         android:paddingHorizontal="50dp"
                         style="@style/saveButton" />
 
@@ -316,7 +505,7 @@
             android:elevation="8dp"
             android:layout_marginHorizontal="25dp"
             app:contentPadding="15dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -348,7 +537,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingTop="5dp" >
 
                         <TextView
                             android:layout_width="wrap_content"

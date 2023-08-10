@@ -33,6 +33,7 @@ import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
@@ -181,6 +182,11 @@ interface ApiService {
     @GET(value="materiales")
     fun getMateriales(@Header(value="Authorization") authHeader: String): Call<ArrayList<Material>>
 
+    // Retrieving material by id from api
+    @GET(value="materiales/{id}")
+    fun getMaterialById(@Path(value="id") id: Int, @Header(value="Authorization") authHeader: String):
+            Call<ArrayList<Material>>
+
     @FormUrlEncoded
     @POST("materiales")
     @Headers("Accept: application/json")
@@ -207,10 +213,40 @@ interface ApiService {
         @Field("es_prod_terminado") esProdTerminado: Boolean,
     ): Call<SimpleResponse>
 
-    // Retrieving material from api
-    @GET(value="materiales/{id}")
-    fun getMaterialById(@Path(value="id") id: Int, @Header(value="Authorization") authHeader: String):
-            Call<ArrayList<Material>>
+    @FormUrlEncoded
+    @PUT("materiales/{id}")
+    @Headers("Accept: application/json")
+    fun putMaterial(
+        @Path(value="id") id: Int,
+        @Header("Authorization") authHeader: String,
+        @Field("empresa") empresa: String,
+        @Field("nombre") nombre: String,
+        @Field("tipo_alta") tipoAlta: String,
+        @Field("familia") familia: String,
+        @Field("subfamilia") subfamilia: String,
+        @Field("marca") marca: String,
+        @Field("parte_modelo") parteModelo: String,
+        @Field("nombre_comun") nombreComun: String,
+        @Field("medida") medida: String,
+        @Field("ing_activo") ingActivo: String,
+        @Field("tipo_producto") tipoProducto: String,
+        @Field("alias") alias: String,
+        @Field("unidad") unidad: String,
+        @Field("iva") iva: String,
+        @Field("ieps") ieps: String,
+        @Field("proposito") proposito: String,
+        @Field("es_importado") esImportado: Boolean,
+        @Field("es_material_empaque") esMaterialEmpaque: Boolean,
+        @Field("es_prod_terminado") esProdTerminado: Boolean,
+        @Field("comentarios") comentarios: String,
+        @Field("compras") compras: Boolean,
+        @Field("finanzas") finanzas: Boolean,
+        @Field("sistemas") sistemas: Boolean,
+        @Field("aprobado") aprobado: Boolean,
+        @Field("rechazado_compras") rechazadoCompras: Boolean,
+        @Field("rechazado_finanzas") rechazadoFinanzas: Boolean,
+        @Field("rechazado_sistemas") rechazadoSistemas: Boolean,
+    ): Call<SimpleResponse>
 
     companion object Factory {
         private const val BASE_URL = "http://192.168.1.6:89/api/"

@@ -31,13 +31,15 @@
             android:exported="false" />
         <activity
             android:name=".ui.MyRequestsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.CreateProviderActivity"
             android:exported="false" />
         <activity
             android:name=".ui.NewRequestActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.MenuActivity"
             android:exported="false"

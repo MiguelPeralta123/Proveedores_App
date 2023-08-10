@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
@@ -26,6 +27,7 @@ import com.learning.proveedoresapp.model.Subfamilia
 import com.learning.proveedoresapp.model.Unidad
 import com.learning.proveedoresapp.util.PreferenceHelper
 import com.learning.proveedoresapp.util.PreferenceHelper.get
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,11 +42,17 @@ class ModifyMaterialActivity : AppCompatActivity() {
         PreferenceHelper.defaultPrefs(this)
     }
 
-    private var empresas = listOf<Empresa>()
-    private var tipos = listOf<MaterialTipoAlta>()
-    private var familias = listOf<Familia>()
-    private var subfamilias = listOf<Subfamilia>()
-    private var unidades = listOf<Unidad>()
+    // Changes depending on which button is clicked (approve / decline)
+    private var declined = false
+
+    // Store request status
+    private var compras = false
+    private var finanzas = false
+    private var sistemas = false
+    private var aprobado = false
+    private var rechazadoCompras = false
+    private var rechazadoFinanzas = false
+    private var rechazadoSistemas = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +60,8 @@ class ModifyMaterialActivity : AppCompatActivity() {
 
         // Getting id from MaterialAdapter
         val materialId = intent.getIntExtra("materialId", 0)
+
+        setupEditButtons()
 
         val btnApprove = findViewById<Button>(R.id.btn_approve)
         btnApprove.setOnClickListener {
@@ -77,30 +87,162 @@ class ModifyMaterialActivity : AppCompatActivity() {
             }
         }
 
+        val btnDecline = findViewById<Button>(R.id.btn_decline)
+        btnDecline.setOnClickListener {
+            // Field validation
+            val linearLayoutModifyMaterial = findViewById<LinearLayout>(R.id.linear_layout_modify_material)
+            val etNombre = findViewById<EditText>(R.id.et_nombre)
+            val etProposito = findViewById<EditText>(R.id.et_proposito)
+            val etComentarios = findViewById<EditText>(R.id.et_comentarios)
+
+            etNombre.error = if (etNombre.text.toString().isEmpty()) "Campo obligatorio" else null
+            etProposito.error = if (etProposito.text.toString().isEmpty()) "Campo obligatorio" else null
+            etComentarios.error = if (etComentarios.text.toString().isEmpty()) "Campo obligatorio" else null
+
+            if (etNombre.error != null || etProposito.error != null || etComentarios.error != null) {
+                Snackbar.make(linearLayoutModifyMaterial, "La solicitud contiene campos incorrectos",
+                    Snackbar.LENGTH_SHORT).show()
+            }
+            else {
+                // If all fields are correct, go to confirm view
+                val cvModifyMaterial = findViewById<CardView>(R.id.cv_modify_material)
+                val cvConfirmData = findViewById<CardView>(R.id.cv_confirm_data)
+                declined = true
+                loadConfirmData()
+                cvModifyMaterial.visibility = View.GONE
+                cvConfirmData.visibility = View.VISIBLE
+            }
+        }
+
         val btnModify = findViewById<Button>(R.id.btn_modify)
         btnModify.setOnClickListener {
-            val cvCreateMaterial = findViewById<CardView>(R.id.cv_create_material)
+            val cvModifyMaterial = findViewById<CardView>(R.id.cv_modify_material)
             val cvConfirmData = findViewById<CardView>(R.id.cv_confirm_data)
-            cvCreateMaterial.visibility = View.VISIBLE
+            cvModifyMaterial.visibility = View.VISIBLE
             cvConfirmData.visibility = View.GONE
         }
 
         val btnConfirm = findViewById<Button>(R.id.btn_confirm)
         btnConfirm.setOnClickListener {
-            performPutMaterial()
+            performPutMaterial(materialId)
         }
 
-        // Adding data to spinners
-        loadEmpresas()
-        loadMaterialTipoAlta()
+        // Listening to changes on spinners
+        listenEmpresaChange()
         listenTipoAltaChange()
         listenFamiliaChange()
+        listenSubfamiliaChange()
+        listenUnidadChange()
 
         // Loading the record
         loadMaterial(materialId)
     }
 
-    private fun performPutMaterial() {
+    private fun setupEditButtons() {
+
+        val ibEditEmpresa = findViewById<ImageButton>(R.id.ib_edit_empresa)
+        val tvEditEmpresa = findViewById<TextView>(R.id.tv_edit_empresa)
+        val spinnerEmpresa = findViewById<Spinner>(R.id.spinner_empresa)
+
+        val ibEditTipoAlta = findViewById<ImageButton>(R.id.ib_edit_tipo_alta)
+        val tvEditTipoAlta = findViewById<TextView>(R.id.tv_edit_tipo_alta)
+        val spinnerTipoAlta = findViewById<Spinner>(R.id.spinner_material_tipo_alta)
+
+        val ibEditFamilia = findViewById<ImageButton>(R.id.ib_edit_familia)
+        val tvEditFamilia = findViewById<TextView>(R.id.tv_edit_familia)
+        val spinnerFamilia = findViewById<Spinner>(R.id.spinner_familia)
+
+        val ibEditSubfamilia = findViewById<ImageButton>(R.id.ib_edit_subfamilia)
+        val tvEditSubfamilia = findViewById<TextView>(R.id.tv_edit_subfamilia)
+        val spinnerSubfamilia = findViewById<Spinner>(R.id.spinner_subfamilia)
+
+        val ibEditUnidad = findViewById<ImageButton>(R.id.ib_edit_unidad)
+        val tvEditUnidad = findViewById<TextView>(R.id.tv_edit_unidad)
+        val spinnerUnidad = findViewById<Spinner>(R.id.spinner_unidad)
+
+        ibEditEmpresa.setOnClickListener {
+            if (tvEditEmpresa.visibility == View.VISIBLE) {
+                loadEmpresas()
+                tvEditEmpresa.visibility = View.GONE
+                spinnerEmpresa.visibility = View.VISIBLE
+                ibEditEmpresa.setImageResource(R.drawable.ic_check)
+            } else {
+                spinnerEmpresa.visibility = View.GONE
+                tvEditEmpresa.visibility = View.VISIBLE
+                ibEditEmpresa.setImageResource(R.drawable.ic_edit)
+            }
+        }
+
+        ibEditTipoAlta.setOnClickListener {
+            if (tvEditTipoAlta.visibility == View.VISIBLE) {
+                loadMaterialTipoAlta()
+                tvEditTipoAlta.visibility = View.GONE
+                spinnerTipoAlta.visibility = View.VISIBLE
+                ibEditTipoAlta.setImageResource(R.drawable.ic_check)
+
+                tvEditFamilia.visibility = View.GONE
+                spinnerFamilia.visibility = View.VISIBLE
+                ibEditFamilia.setImageResource(R.drawable.ic_check)
+
+                tvEditSubfamilia.visibility = View.GONE
+                spinnerSubfamilia.visibility = View.VISIBLE
+                ibEditSubfamilia.setImageResource(R.drawable.ic_check)
+
+                tvEditUnidad.visibility = View.GONE
+                spinnerUnidad.visibility = View.VISIBLE
+                ibEditUnidad.setImageResource(R.drawable.ic_check)
+            } else {
+                spinnerTipoAlta.visibility = View.GONE
+                tvEditTipoAlta.visibility = View.VISIBLE
+                ibEditTipoAlta.setImageResource(R.drawable.ic_edit)
+            }
+        }
+
+        ibEditFamilia.setOnClickListener {
+            if (tvEditFamilia.visibility == View.VISIBLE) {
+                loadFamilias(tvEditTipoAlta.text.toString())
+                tvEditFamilia.visibility = View.GONE
+                spinnerFamilia.visibility = View.VISIBLE
+                ibEditFamilia.setImageResource(R.drawable.ic_check)
+
+                tvEditSubfamilia.visibility = View.GONE
+                spinnerSubfamilia.visibility = View.VISIBLE
+                ibEditSubfamilia.setImageResource(R.drawable.ic_check)
+            } else {
+                spinnerFamilia.visibility = View.GONE
+                tvEditFamilia.visibility = View.VISIBLE
+                ibEditFamilia.setImageResource(R.drawable.ic_edit)
+            }
+        }
+
+        ibEditSubfamilia.setOnClickListener {
+            if (tvEditSubfamilia.visibility == View.VISIBLE) {
+                loadSubfamilias(tvEditFamilia.text.toString())
+                tvEditSubfamilia.visibility = View.GONE
+                spinnerSubfamilia.visibility = View.VISIBLE
+                ibEditSubfamilia.setImageResource(R.drawable.ic_check)
+            } else {
+                spinnerSubfamilia.visibility = View.GONE
+                tvEditSubfamilia.visibility = View.VISIBLE
+                ibEditSubfamilia.setImageResource(R.drawable.ic_edit)
+            }
+        }
+
+        ibEditUnidad.setOnClickListener {
+            if (tvEditUnidad.visibility == View.VISIBLE) {
+                loadUnidades(tvEditTipoAlta.text.toString())
+                tvEditUnidad.visibility = View.GONE
+                spinnerUnidad.visibility = View.VISIBLE
+                ibEditUnidad.setImageResource(R.drawable.ic_check)
+            } else {
+                spinnerUnidad.visibility = View.GONE
+                tvEditUnidad.visibility = View.VISIBLE
+                ibEditUnidad.setImageResource(R.drawable.ic_edit)
+            }
+        }
+    }
+
+    private fun performPutMaterial(idMaterial: Int) {
         val btnConfirm = findViewById<Button>(R.id.btn_confirm)
         btnConfirm.isClickable = false
 
@@ -126,10 +268,38 @@ class ModifyMaterialActivity : AppCompatActivity() {
         val esImportado = findViewById<CheckBox>(R.id.cb_es_importado).isChecked
         val esMaterialEmpaque = findViewById<CheckBox>(R.id.cb_es_material_empaque).isChecked
         val esProdTerminado = findViewById<CheckBox>(R.id.cb_es_prod_terminado).isChecked
+        val comentarios = findViewById<TextView>(R.id.tv_comentarios).text.toString()
 
-        val call = apiService.postMaterial(authorization, empresa, nombre,tipoAlta, familia, subfamilia, marca, parteModelo,
+        // If the "Rechazar" button was clicked, send a post with {compras:0, finanzas:0, sistemas:0}
+        // and rechazado_somehting depending on who declined it
+        if (declined) {
+            rechazadoCompras = compras
+            rechazadoFinanzas = finanzas
+            rechazadoSistemas = sistemas
+            compras = false
+            finanzas = false
+            sistemas = false
+        }
+        // If the "Aprobar" button was clicked, send a post with {compras:0, finanzas:1, sistemas:0}
+        // in case compras had approved it, for example
+        else {
+            if (compras) {
+                compras = false
+                finanzas = true
+            }
+            else if (finanzas) {
+                finanzas = false
+                sistemas = true
+            }
+            else if (sistemas) {
+                sistemas = false
+                aprobado = true
+            }
+        }
+        // Make the api request with the new values
+        val call = apiService.putMaterial(idMaterial, authorization, empresa, nombre,tipoAlta, familia, subfamilia, marca, parteModelo,
             nombreComun, medida, ingActivo, tipoProducto, alias, unidad, iva, ieps, proposito, esImportado, esMaterialEmpaque,
-            esProdTerminado)
+            esProdTerminado, comentarios, compras, finanzas, sistemas, aprobado, rechazadoCompras, rechazadoFinanzas, rechazadoSistemas)
         call.enqueue(object: Callback<SimpleResponse> {
             override fun onResponse(
                 call: Call<SimpleResponse>,
@@ -165,7 +335,7 @@ class ModifyMaterialActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        empresas = it.toMutableList()
+                        val empresas = it.toMutableList()
                         spinnerEmpresa.adapter = ArrayAdapter(this@ModifyMaterialActivity,
                             android.R.layout.simple_list_item_1, empresas)
                     }
@@ -176,6 +346,22 @@ class ModifyMaterialActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    // Listening to changes on TipoAlta spinner to load Familia spinner
+    private fun listenEmpresaChange() {
+        val spinnerEmpresa = findViewById<Spinner>(R.id.spinner_empresa)
+        val tvEditEmpresa = findViewById<TextView>(R.id.tv_edit_empresa)
+        //val ibEditEmpresa = findViewById<ImageButton>(R.id.ib_edit_empresa)
+        spinnerEmpresa.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val empresa = adapter?.getItemAtPosition(position) as Empresa
+                tvEditEmpresa.text = empresa.nombre
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
     }
 
     // Adding data to TipoAlta spinner
@@ -191,7 +377,7 @@ class ModifyMaterialActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        tipos = it.toMutableList()
+                        val tipos = it.toMutableList()
                         spinnerTipoAlta.adapter = ArrayAdapter(this@ModifyMaterialActivity,
                             android.R.layout.simple_list_item_1, tipos)
                     }
@@ -207,9 +393,12 @@ class ModifyMaterialActivity : AppCompatActivity() {
     // Listening to changes on TipoAlta spinner to load Familia spinner
     private fun listenTipoAltaChange() {
         val spinnerTipoAlta = findViewById<Spinner>(R.id.spinner_material_tipo_alta)
+        val tvEditTipoAlta = findViewById<TextView>(R.id.tv_edit_tipo_alta)
+
         spinnerTipoAlta.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val tipoAlta = adapter?.getItemAtPosition(position) as MaterialTipoAlta
+                tvEditTipoAlta.text = tipoAlta.tipo
                 loadFamilias(tipoAlta.tipo)
                 loadUnidades(tipoAlta.tipo)
             }
@@ -232,7 +421,7 @@ class ModifyMaterialActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        familias = it.toMutableList()
+                        val familias = it.toMutableList()
                         spinnerFamilia.adapter = ArrayAdapter(this@ModifyMaterialActivity, android.R.layout.simple_list_item_1, familias)
                     }
                 }
@@ -247,9 +436,12 @@ class ModifyMaterialActivity : AppCompatActivity() {
     // Listening to changes on Familia spinner to load Subfamilia spinner
     private fun listenFamiliaChange() {
         val spinnerFamilia = findViewById<Spinner>(R.id.spinner_familia)
+        val tvEditFamilia = findViewById<TextView>(R.id.tv_edit_familia)
+
         spinnerFamilia.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val familia = adapter?.getItemAtPosition(position) as Familia
+                tvEditFamilia.text = familia.familia
                 loadSubfamilias(familia.familia)
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -271,7 +463,7 @@ class ModifyMaterialActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        subfamilias = it.toMutableList()
+                        val subfamilias = it.toMutableList()
                         spinnerSubfamilia.adapter = ArrayAdapter(this@ModifyMaterialActivity, android.R.layout.simple_list_item_1,
                             subfamilias)
                     }
@@ -282,6 +474,22 @@ class ModifyMaterialActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    // Listening to changes on Familia spinner to load Subfamilia spinner
+    private fun listenSubfamiliaChange() {
+        val spinnerSubfamilia = findViewById<Spinner>(R.id.spinner_subfamilia)
+        val tvEditSubfamilia = findViewById<TextView>(R.id.tv_edit_subfamilia)
+
+        spinnerSubfamilia.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val subfamilia = adapter?.getItemAtPosition(position) as Subfamilia
+                tvEditSubfamilia.text = subfamilia.subfamilia
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
     }
 
     // Adding data to Unidad spinner
@@ -297,7 +505,7 @@ class ModifyMaterialActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        unidades = it.toMutableList()
+                        val unidades = it.toMutableList()
                         spinnerUnidad.adapter = ArrayAdapter(this@ModifyMaterialActivity,
                             android.R.layout.simple_list_item_1, unidades)
                     }
@@ -310,16 +518,32 @@ class ModifyMaterialActivity : AppCompatActivity() {
         })
     }
 
+    // Listening to changes on Familia spinner to load Subfamilia spinner
+    private fun listenUnidadChange() {
+        val spinnerUnidad = findViewById<Spinner>(R.id.spinner_unidad)
+        val tvEditUnidad = findViewById<TextView>(R.id.tv_edit_unidad)
+
+        spinnerUnidad.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val unidad = adapter?.getItemAtPosition(position) as Unidad
+                tvEditUnidad.text = unidad.unidad_medida
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+    }
+
     // Adding data to all fields
     private fun loadMaterial(idMaterial: Int) {
         // Getting jwt from preferencies
         val jwt = preferences["jwt", ""]
         val tvSolicitante = findViewById<TextView>(R.id.tv_solicitante)
-        val spinnerEmpresa = findViewById<Spinner>(R.id.spinner_empresa)
+        val tvEmpresa = findViewById<TextView>(R.id.tv_edit_empresa)
         val etNombre = findViewById<EditText>(R.id.et_nombre)
-        val spinnerTipoAlta = findViewById<Spinner>(R.id.spinner_material_tipo_alta)
-        val spinnerFamilia = findViewById<Spinner>(R.id.spinner_familia)
-        val spinnerSubfamilia = findViewById<Spinner>(R.id.spinner_subfamilia)
+        val tvTipoAlta = findViewById<TextView>(R.id.tv_edit_tipo_alta)
+        val tvFamilia = findViewById<TextView>(R.id.tv_edit_familia)
+        val tvSubfamilia = findViewById<TextView>(R.id.tv_edit_subfamilia)
         val etMarca = findViewById<EditText>(R.id.et_marca)
         val etParteModelo = findViewById<EditText>(R.id.et_parte_modelo)
         val etNombreComun = findViewById<EditText>(R.id.et_nombre_comun)
@@ -327,13 +551,16 @@ class ModifyMaterialActivity : AppCompatActivity() {
         val etIngActivo = findViewById<EditText>(R.id.et_ing_activo)
         val etTipoProducto = findViewById<EditText>(R.id.et_tipo_producto)
         val etAlias = findViewById<EditText>(R.id.et_alias)
-        val spinnerUnidad = findViewById<Spinner>(R.id.spinner_unidad)
+        val tvUnidad = findViewById<TextView>(R.id.tv_edit_unidad)
         val etIva = findViewById<EditText>(R.id.et_iva)
         val etIeps = findViewById<EditText>(R.id.et_ieps)
         val etProposito = findViewById<EditText>(R.id.et_proposito)
         val cbEsImportado = findViewById<CheckBox>(R.id.cb_es_importado)
         val cbEsMaterialEmpaque = findViewById<CheckBox>(R.id.cb_es_material_empaque)
         val cbEsProdTerminado = findViewById<CheckBox>(R.id.cb_es_prod_terminado)
+        val tvAprobCompras = findViewById<TextView>(R.id.tv_aprob_compras)
+        val tvAprobFinanzas = findViewById<TextView>(R.id.tv_aprob_finanzas)
+        val tvAprobSistemas = findViewById<TextView>(R.id.tv_aprob_sistemas)
         val etComentarios = findViewById<EditText>(R.id.et_comentarios)
 
         val call = apiService.getMaterialById(idMaterial, "Bearer $jwt")
@@ -346,18 +573,17 @@ class ModifyMaterialActivity : AppCompatActivity() {
                     response.body()?.let {
                         val material = it
 
-                        val empresaPosition = empresas.indexOfFirst { it.toString() == material[0].empresa }
-                        val tipoAltaPosition = tipos.indexOfFirst { it.toString() == material[0].tipoAlta }
-                        val familiaPosition = familias.indexOfFirst { it.toString() == material[0].familia }
-                        val subfamiliaPosition = subfamilias.indexOfFirst { it.toString() == material[0].subfamilia }
-                        val unidadPosition = unidades.indexOfFirst { it.toString() == material[0].unidad }
+                        // Getting request status
+                        compras = material[0].compras
+                        finanzas = material[0].finanzas
+                        sistemas = material[0].sistemas
 
                         tvSolicitante.text = material[0].nombreSolicitante
-                        spinnerEmpresa.setSelection(empresaPosition)
+                        tvEmpresa.text = material[0].empresa
                         etNombre.setText(material[0].nombre)
-                        spinnerTipoAlta.setSelection(tipoAltaPosition)
-                        spinnerFamilia.setSelection(familiaPosition)
-                        spinnerSubfamilia.setSelection(subfamiliaPosition)
+                        tvTipoAlta.text = material[0].tipoAlta
+                        tvFamilia.text = material[0].familia
+                        tvSubfamilia.text = material[0].subfamilia
                         etMarca.setText(material[0].marca)
                         etParteModelo.setText(material[0].parte_modelo)
                         etNombreComun.setText(material[0].nombreComun)
@@ -365,13 +591,16 @@ class ModifyMaterialActivity : AppCompatActivity() {
                         etIngActivo.setText(material[0].ingActivo)
                         etTipoProducto.setText(material[0].tipoProducto)
                         etAlias.setText(material[0].alias)
-                        spinnerUnidad.setSelection(unidadPosition)
+                        tvUnidad.text = material[0].unidad
                         etIva.setText(material[0].iva)
                         etIeps.setText(material[0].ieps)
                         etProposito.setText(material[0].proposito)
                         cbEsImportado.isChecked = material[0].esImportado
                         cbEsMaterialEmpaque.isChecked = material[0].esMaterialEmpaque
                         cbEsProdTerminado.isChecked = material[0].esProdTerminado
+                        tvAprobCompras.text = if (material[0].finanzas) "Si" else "No"
+                        tvAprobFinanzas.text = if (material[0].sistemas) "Si" else "No"
+                        tvAprobSistemas.text = if (material[0].aprobado) "Si" else "No"
                         etComentarios.setText(material[0].comentarios)
                     }
                 }
@@ -385,11 +614,11 @@ class ModifyMaterialActivity : AppCompatActivity() {
 
     private fun loadConfirmData() {
         val tvSolicitante = findViewById<TextView>(R.id.tv_solicitante)
-        val spinnerEmpresa = findViewById<Spinner>(R.id.spinner_empresa)
+        val tvEditEmpresa = findViewById<TextView>(R.id.tv_edit_empresa)
         val etNombre = findViewById<EditText>(R.id.et_nombre)
-        val spinnerTipoAlta = findViewById<Spinner>(R.id.spinner_material_tipo_alta)
-        val spinnerFamilia = findViewById<Spinner>(R.id.spinner_familia)
-        val spinnerSubfamilia = findViewById<Spinner>(R.id.spinner_subfamilia)
+        val tvEditTipoAlta = findViewById<TextView>(R.id.tv_edit_tipo_alta)
+        val tvEditFamilia = findViewById<TextView>(R.id.tv_edit_familia)
+        val tvEditSubfamilia = findViewById<TextView>(R.id.tv_edit_subfamilia)
         val etMarca = findViewById<EditText>(R.id.et_marca)
         val etParteModelo = findViewById<EditText>(R.id.et_parte_modelo)
         val etNombreComun = findViewById<EditText>(R.id.et_nombre_comun)
@@ -397,13 +626,14 @@ class ModifyMaterialActivity : AppCompatActivity() {
         val etIngActivo = findViewById<EditText>(R.id.et_ing_activo)
         val etTipoProducto = findViewById<EditText>(R.id.et_tipo_producto)
         val etAlias = findViewById<EditText>(R.id.et_alias)
-        val spinnerUnidad = findViewById<Spinner>(R.id.spinner_unidad)
+        val tvEditUnidad = findViewById<TextView>(R.id.tv_edit_unidad)
         val etIva = findViewById<EditText>(R.id.et_iva)
         val etIeps = findViewById<EditText>(R.id.et_ieps)
         val etProposito = findViewById<EditText>(R.id.et_proposito)
         val cbEsImportado = findViewById<CheckBox>(R.id.cb_es_importado)
         val cbEsMaterialEmpaque = findViewById<CheckBox>(R.id.cb_es_material_empaque)
         val cbEsProdTerminado = findViewById<CheckBox>(R.id.cb_es_prod_terminado)
+        val etComentarios = findViewById<EditText>(R.id.et_comentarios)
 
         // TextViews
         val tvSolicitanteConfirm = findViewById<TextView>(R.id.tv_solicitante_confirm)
@@ -426,13 +656,14 @@ class ModifyMaterialActivity : AppCompatActivity() {
         val tvEsImportado = findViewById<TextView>(R.id.tv_es_importado)
         val tvEsMaterialEmpaque = findViewById<TextView>(R.id.tv_es_material_empaque)
         val tvEsProdTerminado = findViewById<TextView>(R.id.tv_es_prod_terminado)
+        val tvComentarios = findViewById<TextView>(R.id.tv_comentarios)
 
         tvSolicitanteConfirm.text = tvSolicitante.text.toString()
-        tvEmpresa.text = spinnerEmpresa.selectedItem.toString()
+        tvEmpresa.text = tvEditEmpresa.text.toString()
         tvNombre.text = etNombre.text.toString()
-        tvTipoAlta.text = spinnerTipoAlta.selectedItem.toString()
-        tvFamilia.text = spinnerFamilia.selectedItem.toString()
-        tvSubfamilia.text = spinnerSubfamilia.selectedItem.toString()
+        tvTipoAlta.text = tvEditTipoAlta.text.toString()
+        tvFamilia.text = tvEditFamilia.text.toString()
+        tvSubfamilia.text = tvEditSubfamilia.text.toString()
         tvMarca.text = etMarca.text.toString()
         tvParteModelo.text = etParteModelo.text.toString()
         tvNombreComun.text = etNombreComun.text.toString()
@@ -440,13 +671,14 @@ class ModifyMaterialActivity : AppCompatActivity() {
         tvIngActivo.text = etIngActivo.text.toString()
         tvTipoProducto.text = etTipoProducto.text.toString()
         tvAlias.text = etAlias.text.toString()
-        tvUnidad.text = spinnerUnidad.selectedItem.toString()
+        tvUnidad.text = tvEditUnidad.text.toString()
         tvIva.text = etIva.text.toString()
         tvIeps.text = etIeps.text.toString()
         tvProposito.text = etProposito.text.toString()
         tvEsImportado.text = if (cbEsImportado.isChecked) "Si" else "No"
         tvEsMaterialEmpaque.text = if (cbEsMaterialEmpaque.isChecked) "Si" else "No"
         tvEsProdTerminado.text = if (cbEsProdTerminado.isChecked) "Si" else "No"
+        tvComentarios.text = etComentarios.text.toString()
     }
 
     override fun onBackPressed() {
